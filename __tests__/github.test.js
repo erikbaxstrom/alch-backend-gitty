@@ -20,4 +20,19 @@ describe('github auth', () => {
       /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[\w\d.]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/callback/i
     );
   });
+
+  it('/api/v1/github/callback should login users and redirect to the dashboard', async () => {
+    const response = await request
+      .agent(app)
+      .get('/api/v1/github/callback?code=42')
+      .redirects(1);
+    console.log('response.body::', response.body);
+    expect(response.body).toEqual({
+      id: expect.any(String),
+      login: 'fake_github_user',
+      avatar: 'https://placebear.com/300/300',
+      iat: expect.any(Number),
+      exp: expect.any(Number),
+    });
+  });
 });
