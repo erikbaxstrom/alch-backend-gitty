@@ -35,4 +35,11 @@ describe('github auth', () => {
       exp: expect.any(Number),
     });
   });
+  it('DELETE /api/v1/posts for logged in user should log out the user', async () => {
+    // log in
+    const agent = request.agent(app);
+    await agent.get('/api/v1/github/callback?code=42').redirects(1);
+    const response = await agent.delete('/api/v1/github');
+    expect(response.status).toBe(204);
+  });
 });
