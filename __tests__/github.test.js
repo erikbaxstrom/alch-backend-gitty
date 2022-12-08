@@ -26,7 +26,6 @@ describe('github auth', () => {
       .agent(app)
       .get('/api/v1/github/callback?code=42')
       .redirects(1);
-    // console.log('response.body::', response.body);
     expect(response.body).toEqual({
       id: expect.any(String),
       login: 'fake_github_user',
@@ -36,7 +35,6 @@ describe('github auth', () => {
     });
   });
   it('DELETE /api/v1/posts for logged in user should log out the user', async () => {
-    // log in
     const agent = request.agent(app);
     await agent.get('/api/v1/github/callback?code=42').redirects(1);
     const response = await agent.delete('/api/v1/github');
