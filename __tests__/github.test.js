@@ -26,7 +26,7 @@ describe('github auth', () => {
       .agent(app)
       .get('/api/v1/github/callback?code=42')
       .redirects(1);
-    console.log('response.body::', response.body);
+    // console.log('response.body::', response.body);
     expect(response.body).toEqual({
       id: expect.any(String),
       login: 'fake_github_user',
