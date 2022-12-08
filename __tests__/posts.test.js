@@ -49,11 +49,28 @@ describe('github auth', () => {
     `);
   });
 
-  it.skip('POST for logged out should 401 error', async () => {
-    //test
+  it('POST /api/v1/posts for logged out should return a 401 error', async () => {
+    const response = await request(app)
+      .post('/api/v1/posts')
+      .send({ detail: 'This should not get posted', userId: 1 });
+    expect(response.status).toBe(401);
   });
 
-  it.skip('POST for logged in should return the posted thing', async () => {
-    //test
+  it('POST /api/v1/posts for logged in user should return the new post', async () => {
+    const agent = request.agent(app);
+    await agent.get('/api/v1/github/callback?code=42').redirects(1);
+
+    const response = await agent.post('/api/v1/posts').send({
+      detail: 'This should get posted',
+      userId: 2,
+      id: expect.any(Number),
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      detail: 'This should get posted',
+      userId: expect.any(Number),
+      id: expect.any(Number),
+    });
   });
 });
