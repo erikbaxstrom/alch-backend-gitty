@@ -23,14 +23,30 @@ describe('github auth', () => {
     // log in
     const agent = request.agent(app);
     await agent.get('/api/v1/github/callback?code=42').redirects(1);
-    console.log('agent::', agent);
     // get the route
     const response = await agent.get('/api/v1/posts');
-    console.log('test posts response::', response);
 
     //expect list back
     expect(response.status).toBe(200);
-    expect(response.body).toMatchInlineSnapshot();
+    expect(response.body).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "detail": "I can haz code?",
+          "id": "1",
+          "user_id": "1",
+        },
+        Object {
+          "detail": "What would you think if I coded a tune?",
+          "id": "2",
+          "user_id": "2",
+        },
+        Object {
+          "detail": "I ate a slug",
+          "id": "3",
+          "user_id": "1",
+        },
+      ]
+    `);
   });
 
   it.skip('POST for logged out should 401 error', async () => {
