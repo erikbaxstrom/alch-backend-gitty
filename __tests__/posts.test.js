@@ -63,14 +63,13 @@ describe('github auth', () => {
     const response = await agent.post('/api/v1/posts').send({
       detail: 'This should get posted',
       userId: 2,
-      id: expect.any(Number),
     });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       detail: 'This should get posted',
-      userId: expect.any(Number),
-      id: expect.any(Number),
+      userId: expect.any(String),
+      id: expect.any(String),
     });
   });
 });
